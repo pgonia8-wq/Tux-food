@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Navigation, MapPin, Phone, Package } from 'lucide-react-native';
 import { useTheme } from '../../hooks/useTheme';
@@ -13,8 +13,10 @@ import { FONT_SIZE, FONT_WEIGHT, SPACING } from '../../constants/theme';
 export default function ActiveDeliveryScreen() {
   const { colors } = useTheme();
   const { updateOrderStatus } = useOrdersStore();
-  const activeDeliveries = useOrdersStore((s) =>
-    s.orders.filter((o) => o.driver_id === 'usr_driver_01' && o.status === 'en_camino')
+  const orders = useOrdersStore((s) => s.orders);
+  const activeDeliveries = useMemo(() =>
+    orders.filter((o) => o.driver_id === 'usr_driver_01' && o.status === 'en_camino'),
+    [orders]
   );
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Switch, RefreshControl } from 'react-native';
 import { MapPin, Clock, DollarSign, Package } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,9 +16,11 @@ export default function AvailableDeliveriesScreen() {
   const [online, setOnline] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { assignDriver, updateOrderStatus } = useOrdersStore();
+  const orders = useOrdersStore((s) => s.orders);
 
-  const availableOrders = useOrdersStore((s) =>
-    s.orders.filter((o) => o.status === 'listo' && !o.driver_id)
+  const availableOrders = useMemo(() =>
+    orders.filter((o) => o.status === 'listo' && !o.driver_id),
+    [orders]
   );
 
   const mockAvailable = [
